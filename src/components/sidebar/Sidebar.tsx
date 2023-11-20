@@ -38,6 +38,10 @@ const Sidebar = () => {
           </div>
           <div className="sidebarAccount">
             <img src="./yuse.jpg" alt="" />
+            <div className="accountName">
+              <h4>Yusei Imamura</h4>
+              <span>#09220922</span>
+            </div>
           </div>
           <div className="sidebarVoice">
             <MicIcon />
