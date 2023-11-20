@@ -39,5 +39,23 @@
       justify-content: space-between;
       padding: 20px;
     }
+    .SidebarChannels {
+      padding: 13px;
+
+      .SidebarChannelsHeader {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+        align-items: center;
+        color: white;
+
+        .SidebarHeader {
+          display: flex;
+        }
+        .SidebarAddIcon {
+          cursor: pointer;
+        }
+      }
+    }
   }
 }

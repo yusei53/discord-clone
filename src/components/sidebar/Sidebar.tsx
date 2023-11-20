@@ -1,5 +1,6 @@
 import "./Sidebar.scss";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import AddIcon from "@mui/icons-material/Add";
 
 const Sidebar = () => {
   return (
@@ -16,6 +17,15 @@ const Sidebar = () => {
         <div className="SidebarTop">
           <h3>Discord</h3>
           <ExpandMoreIcon />
+        </div>
+        <div className="SidebarChannels">
+          <div className="SidebarChannelsHeader">
+            <div className="SidebarHeader">
+              <ExpandMoreIcon />
+              <h4>チャンネル</h4>
+            </div>
+            <AddIcon className="SidebarAddIcon" />
+          </div>
         </div>
       </div>
     </div>
