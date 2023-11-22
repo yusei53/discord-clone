@@ -2,10 +2,10 @@ import "./App.scss";
 import Sidebar from "./components/sidebar/Sidebar";
 import Chat from "./components/chat/Chat";
 import Login from "./components/login/Login";
+import { UseAppSelector } from "./app/hooks";
 
 function App() {
-  // const user = useSelector({state} => state.user.user);
-  const user = null;
+  const user = UseAppSelector((state) => state.user);
 
   return (
     <>
