@@ -7,18 +7,35 @@ import HeadphonesIcon from "@mui/icons-material/Headphones";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { auth, db } from "../../firebase";
 import { UseAppSelector } from "../../app/hooks";
-import { useEffect } from "react";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import {
+  collection,
+  query,
+  onSnapshot,
+  DocumentData,
+} from "firebase/firestore";
+
+interface Channel {
+  id: string;
+  channel: DocumentData;
+}
 
 const Sidebar = () => {
+  const [channels, setChannels] = useState<Channel[]>([]);
   const user = UseAppSelector((state) => state.user);
 
   const q = query(collection(db, "channels"));
 
   useEffect(() => {
     onSnapshot(q, (querySnapshot) => {
-      const channelsResult = [];
-      querySnapshot.docs.forEach((doc) => console.log(doc));
+      const channelsResult: Channel[] = [];
+      querySnapshot.docs.forEach((doc) =>
+        channelsResult.push({
+          id: doc.id,
+          channel: doc.data(),
+        })
+      );
+      setChannels(channelsResult);
     });
   }, []);
 
@@ -46,10 +63,13 @@ const Sidebar = () => {
             <AddIcon className="sidebarAddIcon" />
           </div>
           <div className="sidebarChannelList">
-            <SidebarChannel />
-            <SidebarChannel />
-            <SidebarChannel />
-            <SidebarChannel />
+            {channels.map((channel) => (
+              <SidebarChannel
+                channel={channel}
+                id={channel.id}
+                key={channel.id}
+              />
+            ))}
           </div>
           <div className="sidebarFooter">
             <div className="sidebarAccount">
