@@ -5,11 +5,23 @@ import SidebarChannel from "./SidebarChannel";
 import MicIcon from "@mui/icons-material/Mic";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { UseAppSelector } from "../../app/hooks";
+import { useEffect } from "react";
+import { collection, query, onSnapshot } from "firebase/firestore";
 
 const Sidebar = () => {
   const user = UseAppSelector((state) => state.user);
+
+  const q = query(collection(db, "channels"));
+
+  useEffect(() => {
+    onSnapshot(q, (querySnapshot) => {
+      const channelsResult = [];
+      querySnapshot.docs.forEach((doc) => console.log(doc));
+    });
+  }, []);
+
   return (
     <div className="sidebar">
       <div className="sidebarLeft">
