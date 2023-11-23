@@ -6,27 +6,65 @@ import GifIcon from "@mui/icons-material/Gif";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ChatMessage from "./ChatMessage";
 import { UseAppSelector } from "../../app/hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CollectionReference,
   DocumentData,
   DocumentReference,
+  Timestamp,
   addDoc,
   collection,
+  onSnapshot,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
+interface Messages {
+  timestamp: Timestamp;
+  message: string;
+  user: {
+    uid: string;
+    photo: string;
+    email: string;
+    displayName: string;
+  };
+}
+
 const Chat = () => {
   const [inputText, setInputText] = useState<string>("");
+  const [messages, setMessages] = useState<Messages[]>([]);
   const ChannelName = UseAppSelector((state) => state.channel.channelName);
   const channelId = UseAppSelector((state) => state.channel.channelId);
   const user = UseAppSelector((state) => state.user.user);
+
+  console.log(inputText);
+
+  useEffect(() => {
+    let collectionRef = collection(
+      db,
+      "channels",
+      String(channelId),
+      "messages"
+    );
+    onSnapshot(collectionRef, (snapshot) => {
+      let results: Messages[] = [];
+      snapshot.docs.forEach((doc) => {
+        results.push({
+          timestamp: doc.data().timestamp,
+          message: doc.data().message,
+          user: doc.data().user,
+        });
+      });
+      setMessages(results);
+      console.log(results);
+    });
+  }, [channelId]);
 
   const sendMessage = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    console.log("tt");
 
     const collectionRef: CollectionReference<DocumentData> = collection(
       db,
@@ -60,7 +98,7 @@ const Chat = () => {
           <input
             type="text"
             placeholder="Slackへメッセージを送る"
-            onSubmit={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setInputText(e.target.value)
             }
           />
