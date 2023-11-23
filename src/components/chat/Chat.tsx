@@ -6,10 +6,16 @@ import GifIcon from "@mui/icons-material/Gif";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ChatMessage from "./ChatMessage";
 import { UseAppSelector } from "../../app/hooks";
+import React, { useState } from "react";
 
 const Chat = () => {
+  const [inputText, setInputText] = useState<string>("");
   const ChannelName = UseAppSelector((state) => state.channel.channelName);
-  // console.log(ChannelName);
+
+  const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="chat">
       <ChatHeader channelName={ChannelName} />
@@ -21,8 +27,20 @@ const Chat = () => {
       <div className="chatInput">
         <AddCircleIcon />
         <form>
-          <input type="text" placeholder="Slackへメッセージを送る" />
-          <button type="submit" className="chatInputButton">
+          <input
+            type="text"
+            placeholder="Slackへメッセージを送る"
+            onSubmit={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setInputText(e.target.value)
+            }
+          />
+          <button
+            type="submit"
+            className="chatInputButton"
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+              sendMessage(e)
+            }
+          >
             送信
           </button>
         </form>
