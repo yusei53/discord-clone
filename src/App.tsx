@@ -10,7 +10,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallBack } from "./utils/ErrorFallBack";
 
 function App() {
-  const user = UseAppSelector((state) => state.user);
+  const user = UseAppSelector((state) => state.user.user);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
