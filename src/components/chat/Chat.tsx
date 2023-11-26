@@ -88,9 +88,17 @@ const Chat = () => {
     <div className="chat">
       <ChatHeader channelName={ChannelName} />
       <div className="chatMessage">
+        {messages.map((message, index) => (
+          <ChatMessage
+            key={index}
+            message={message.message}
+            timestamp={message.timestamp}
+            user={message.user}
+          />
+        ))}
+        {/* <ChatMessage />
         <ChatMessage />
-        <ChatMessage />
-        <ChatMessage />
+        <ChatMessage /> */}
       </div>
       <div className="chatInput">
         <AddCircleIcon />
