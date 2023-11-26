@@ -6,68 +6,26 @@ import GifIcon from "@mui/icons-material/Gif";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import ChatMessage from "./ChatMessage";
 import { UseAppSelector } from "../../app/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   CollectionReference,
   DocumentData,
   DocumentReference,
-  Timestamp,
   addDoc,
   collection,
-  onSnapshot,
-  orderBy,
-  query,
   serverTimestamp,
 } from "firebase/firestore";
 import { db } from "../../firebase";
-import { timeStamp } from "console";
-
-interface Messages {
-  timestamp: Timestamp;
-  message: string;
-  user: {
-    uid: string;
-    photo: string;
-    email: string;
-    displayName: string;
-  };
-}
+import useSubCollection from "../../hooks/useSubCollection";
 
 const Chat = () => {
   const [inputText, setInputText] = useState<string>("");
-  const [messages, setMessages] = useState<Messages[]>([]);
   const ChannelName = UseAppSelector((state) => state.channel.channelName);
-  const channelId = UseAppSelector((state) => state.channel.channelId);
   const user = UseAppSelector((state) => state.user.user);
+  const channelId = UseAppSelector((state) => state.channel.channelId);
+  const { subDocuments: messages } = useSubCollection("channels", "messages");
 
   console.log(inputText);
-
-  useEffect(() => {
-    let collectionRef = collection(
-      db,
-      "channels",
-      String(channelId),
-      "messages"
-    );
-
-    const collectionRefOrderBy = query(
-      collectionRef,
-      orderBy("timestamp", "desc")
-    );
-
-    onSnapshot(collectionRefOrderBy, (snapshot) => {
-      let results: Messages[] = [];
-      snapshot.docs.forEach((doc) => {
-        results.push({
-          timestamp: doc.data().timestamp,
-          message: doc.data().message,
-          user: doc.data().user,
-        });
-      });
-      setMessages(results);
-      console.log(results);
-    });
-  }, [channelId]);
 
   const sendMessage = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
