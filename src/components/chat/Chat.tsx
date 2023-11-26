@@ -90,7 +90,7 @@ const Chat = () => {
         user: user,
       }
     );
-    console.log(docRef);
+    // console.log(docRef);
     setInputText("");
   };
 
